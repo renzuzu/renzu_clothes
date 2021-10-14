@@ -48,11 +48,21 @@ Citizen.CreateThread(function()
 	PlayerData = ESX.GetPlayerData()
 end)
 
-function GetClotheData(componentid,drawableid,textureid,prop)
-    if prop then return Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
-    elseif not prop then return Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
+function GetClotheData(componentid,drawableid,textureid,prop,name)
+    local ret = {}
+    if prop then 
+        ret = Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
+        if name then
+            ret.Price = ret.Price * Config.Data[name].multiplier
+        end
+        return ret
+    elseif not prop then
+        ret = Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
+        if name then
+            ret.Price = ret.Price * Config.Data[name].multiplier
+        end
     end
-    return 'not found'
+    return ret
 end
 
 RegisterNetEvent('esx:playerLoaded')
@@ -500,8 +510,8 @@ function SelectClothes(data)
         or Config.Data[name].componentid ~= nil and defaultclothes[Config.Data[name].componentid] and defaultclothes[Config.Data[name].componentid].texture ~= texture then
         local price = defaultclothes[Config.Data[name].componentid].value ~= nil and defaultclothes[Config.Data[name].componentid].value or 0
         
-        bill = bill + GetClotheData(Config.Data[name].componentid,draw,texture,props).Price - price
-        defaultclothes[Config.Data[name].componentid].value = GetClotheData(Config.Data[name].componentid,draw,texture,props).Price
+        bill = bill + GetClotheData(Config.Data[name].componentid,draw,texture,props,name).Price - price
+        defaultclothes[Config.Data[name].componentid].value = GetClotheData(Config.Data[name].componentid,draw,texture,props,name).Price
         
         unpaid[re] = {incart = showall or false, skin = re, compo = Config.Data[name].componentid,draw = draw, texture = texture, price = defaultclothes[Config.Data[name].componentid].value, label = GetClotheData(Config.Data[name].componentid,draw,texture,props).label or GetClotheData(Config.Data[name].componentid,draw,texture,props).NameHash, namehash = GetClotheData(Config.Data[name].componentid,draw,texture,props).NameHash}
     end
