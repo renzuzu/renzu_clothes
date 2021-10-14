@@ -81,6 +81,8 @@
           icon['Bracelets 2'] = 'fad fa-hand-point-left'
           icon['Mask 1'] = 'fas fa-mask'
           icon['Mask 2'] = 'fad fa-mask'
+          icon['Bulletproof vest 1'] = 'fas fa-shield'
+          icon['Bulletproof vest 2'] = 'fad fa-shield'
           if (!inventory) {
             //$("#save_clothe").html('Save Clothe')
             inventoryroom = false
@@ -211,6 +213,7 @@
             icon['ears'] = 'far fa-gem'
             icon['bracelets'] = 'fas fa-hand-point-left'
             icon['mask'] = 'fas fa-mask'
+            icon['bproof'] = 'fas fa-shield'
             for (const i in inventory) {
               if (!inv[inventory[i].compo]) {
                 inv[inventory[i].compo] = {}

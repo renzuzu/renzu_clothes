@@ -11,6 +11,38 @@ Config.Notify = function(type,title,message,source)
   end
 end
 
+Config.Data = {
+  ['arms'] = {componentid = 3, type = 'ComponentVariations', m_default = 15, f_default = 15, multiplier = 1.0},
+  ['torso_1'] = {componentid = 11, type = 'ComponentVariations', m_default = 15, f_default = 15, multiplier = 1.0},
+  ['torso_2'] = {componentid = 11, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['tshirt_1'] = {componentid = 8, type = 'ComponentVariations', m_default = 15, f_default = 14, multiplier = 1.0},
+  ['tshirt_2'] = {componentid = 8, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['glasses_1'] = {componentid = 1 ,type = 'Props', m_default = 14, f_default = 5, multiplier = 1.0},
+  ['glasses_2'] = {componentid = 1 ,type = 'Props', m_default = 14, f_default = 5, multiplier = 1.0},
+  ['pants_1'] = {componentid = 4, type = 'ComponentVariations', m_default = 14, f_default = 15, multiplier = 1.0},
+  ['pants_2'] = {componentid = 4, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['helmet_1'] = {componentid = 0 ,type = 'Props', m_default = 11, f_default = -1, multiplier = 1.0},
+  ['helmet_2'] = {componentid = 0 ,type = 'Props', m_default = -1, f_default = -1, multiplier = 1.0},
+  ['watches_1'] = {componentid = 6 ,type = 'Props', multiplier = 1.0},
+  ['watches_2'] = {componentid = 6 ,type = 'Props', multiplier = 1.0},
+  ['bracelets_1'] = {componentid = 7 ,type = 'Props', multiplier = 1.0},
+  ['bracelets_2'] = {componentid = 7 ,type = 'Props', multiplier = 1.0},
+  ['ears_1'] = {componentid = 2 ,type = 'Props', multiplier = 1.0},
+  ['ears_2'] = {componentid = 2 ,type = 'Props', multiplier = 1.0},
+  ['shoes_1'] = {componentid = 6, type = 'ComponentVariations', m_default = 34, f_default = 35, multiplier = 1.0},
+  ['shoes_2'] = {componentid = 6, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['decals_1'] = {componentid = 10, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['decals_2'] = {componentid = 10, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['bags_1'] = {componentid = 5, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['bags_2'] = {componentid = 5, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['chain_1'] = {componentid = 7, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['chain_2'] = {componentid = 7, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['mask_1'] = {componentid = 1, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['mask_2'] = {componentid = 1, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['bproof_1'] = {componentid = 9, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+  ['bproof_2'] = {componentid = 9, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
+}
+
 Config.Shop = {
   {
     showall = false, -- use categorized display shop or all in one menu
@@ -785,6 +817,16 @@ Config.Shop = {
   },
 
   {
+    name = 'Armor Shop',
+    showall = true, -- disable by default| all in one clothing category in one menu, (not clothes display arrangement)
+    showallindexes = {'bproof_1','bproof_2'}, -- armor draw index
+    range = 5.0,
+    coord = vector3(456.63916015625,-982.88421630859,30.689586639404),
+    job = 'police',
+    blips = {sprite = 73,color = 1},
+  },
+
+  {
     name = 'Clothing Shop',
     range = 5.0,
     coord = vector3(-703.8, -152.3, 36.4),
@@ -798,36 +840,6 @@ Config.Shop = {
     job = 'police',
     blips = {sprite = 73,color = 1}
   },
-}
-
-Config.Data = {
-  ['arms'] = {componentid = 3, type = 'ComponentVariations', m_default = 15, f_default = 15, multiplier = 1.0},
-  ['torso_1'] = {componentid = 11, type = 'ComponentVariations', m_default = 15, f_default = 15, multiplier = 1.0},
-  ['torso_2'] = {componentid = 11, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['tshirt_1'] = {componentid = 8, type = 'ComponentVariations', m_default = 15, f_default = 14, multiplier = 1.0},
-  ['tshirt_2'] = {componentid = 8, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['glasses_1'] = {componentid = 1 ,type = 'Props', m_default = 14, f_default = 5, multiplier = 1.0},
-  ['glasses_2'] = {componentid = 1 ,type = 'Props', m_default = 14, f_default = 5, multiplier = 1.0},
-  ['pants_1'] = {componentid = 4, type = 'ComponentVariations', m_default = 14, f_default = 15, multiplier = 1.0},
-  ['pants_2'] = {componentid = 4, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['helmet_1'] = {componentid = 0 ,type = 'Props', m_default = 11, f_default = -1, multiplier = 1.0},
-  ['helmet_2'] = {componentid = 0 ,type = 'Props', m_default = -1, f_default = -1, multiplier = 1.0},
-  ['watches_1'] = {componentid = 6 ,type = 'Props', multiplier = 1.0},
-  ['watches_2'] = {componentid = 6 ,type = 'Props', multiplier = 1.0},
-  ['bracelets_1'] = {componentid = 7 ,type = 'Props', multiplier = 1.0},
-  ['bracelets_2'] = {componentid = 7 ,type = 'Props', multiplier = 1.0},
-  ['ears_1'] = {componentid = 2 ,type = 'Props', multiplier = 1.0},
-  ['ears_2'] = {componentid = 2 ,type = 'Props', multiplier = 1.0},
-  ['shoes_1'] = {componentid = 6, type = 'ComponentVariations', m_default = 34, f_default = 35, multiplier = 1.0},
-  ['shoes_2'] = {componentid = 6, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['decals_1'] = {componentid = 10, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['decals_2'] = {componentid = 10, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['bags_1'] = {componentid = 5, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['bags_2'] = {componentid = 5, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['chain_1'] = {componentid = 7, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['chain_2'] = {componentid = 7, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['mask_1'] = {componentid = 1, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
-  ['mask_2'] = {componentid = 1, type = 'ComponentVariations', m_default = 0, f_default = 0, multiplier = 1.0},
 }
 
 -- Shop Default variants
@@ -846,4 +858,5 @@ Config.default = {
   'ears_1', 'ears_2',
   'bracelets_2', 'bracelets_2',
   'watches_1', 'watches_2',
+  'bproof_1', 'bproof_2',
 }

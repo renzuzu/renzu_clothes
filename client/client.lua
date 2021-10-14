@@ -194,7 +194,7 @@ CreateThread(function()
             if closestdist < 3 and v.showall then
                 nowardrobe = false
                 showall = v.showall or false
-                DrawZuckerburg(currentshop,v.coord,{2,8}, 'Press [E] Clothing Shop','renzu_clothes:openwardrobe',false, false)
+                DrawZuckerburg(currentshop,v.coord,{2,8}, 'Press [E] Clothing Shop','renzu_clothes:openwardrobe',false, v.showallindexes or false)
             end
             if displays[1] and closestdist < 15 and not v.showall then
                 for k2,v2 in ipairs(displays) do
