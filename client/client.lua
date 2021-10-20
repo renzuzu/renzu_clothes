@@ -524,8 +524,8 @@ function SelectClothes(data)
     --local re = name:gsub("_1", "_2")
     name = name:gsub("arms_2", "arms")
     --
-    camOffset = variantcache[tostring(name)].camOffset
-    zoomOffset = variantcache[tostring(name)].zoomOffset
+    camOffset = variantcache[tostring(name)] ~= nil and variantcache[tostring(name)].camOffset ~= nil and variantcache[tostring(name)].camOffset or 0.5
+    zoomOffset = variantcache[tostring(name)] ~= nil and variantcache[tostring(name)].zoomOffset ~= nil and variantcache[tostring(name)].zoomOffset or 0.5
 end
 
 function deepcopy(orig)
@@ -920,6 +920,7 @@ function DeleteSkinCam()
     isCameraActive = false
     SetCamActive(cam, false)
     RenderScriptCams(false, true, 500, true, true)
+    DestroyCam(cam,true)
 end
 
 RegisterNUICallback('close', function(data, cb)
@@ -928,7 +929,6 @@ RegisterNUICallback('close', function(data, cb)
     SetNuiFocusKeepInput(false)
     open = not open
     cancel = true
-    print(inventory,'hey dude',havecart,clothingopen)
     if showall and havecart then
         for k,v in pairs(incart) do
             incart[k].incart = false
