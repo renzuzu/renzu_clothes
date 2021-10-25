@@ -48,16 +48,20 @@ Citizen.CreateThread(function()
 	PlayerData = ESX.GetPlayerData()
 end)
 
+function Default(componentid,drawableid,textureid)
+    return {NameHash=""..componentid.."_"..drawableid.."_"..textureid, label="Clothe "..componentid.."_"..drawableid.."_"..textureid,Price=5000}
+end
+
 function GetClotheData(componentid,drawableid,textureid,prop,name)
     local ret = {}
     if prop then 
-        ret = Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
+        ret = Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)] ~= nil and Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)] ~= nil and Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)] ~= nil and Components.Props[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)] or Default(componentid,drawableid,textureid)
         if name then
             ret.Price = ret.Price * Config.Data[name].multiplier
         end
         return ret
     elseif not prop then
-        ret = Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)]
+        ret = Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)] ~= nil and Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)] ~= nil and Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)] ~= nil and Components.ComponentVariations[GetEntityModel(PlayerPedId())][tostring(componentid)][tostring(drawableid)][tostring(textureid)] or Default(componentid,drawableid,textureid)
         if name then
             ret.Price = ret.Price * Config.Data[name].multiplier
         end
