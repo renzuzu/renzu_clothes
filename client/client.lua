@@ -755,6 +755,14 @@ RegisterNUICallback('buyitem', function(data, cb)
     cb(true)
 end)
 
+RegisterNUICallback('delclothe', function(data, cb)
+    print(data.name)
+    ESX.TriggerServerCallback("renzu_clothes:delclothe",function(a)
+        confirm = a
+        cb(a)
+    end,data.name)
+end)
+
 RegisterNUICallback('selectclothes', function(data, cb)
     if clothes[data.name] ~= nil and data.name ~= 'noclothe' then
         confirm = true

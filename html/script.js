@@ -590,7 +590,7 @@
             for (const i in wardrobe) {
               console.log("wardrobe")
               if (wardrobe[i]) {
-                var cloth = `<div class="option" style="width:100%;background:#0a0a0ac7;
+                var cloth = `<div id="`+i+`_clotheid" class="option" style="width:100%;background:#0a0a0ac7;
                 margin-top: 5px;
                 color: #bbe6ff;
                 font-family: 'Font Awesome 5 Free';border-radius:5px">
@@ -616,7 +616,7 @@
                 /* float: right; */
                 position: absolute;
                 right: 20px;
-                "><i style="font-size: 20px;color: #9c9c9c;padding: 5px;z-index: 999;" class="fas fa-window-close"></i></span>
+                "><i onclick="deloutfit('`+i+`')" style="font-size: 20px;color: #9c9c9c;padding: 5px;z-index: 999;" class="fas fa-window-close"></i></span>
                 `+i+`
                 </label>
                 </div>`
@@ -749,6 +749,14 @@
               $('#totalcost').html(t)
             });
           }
+        }
+
+        function deloutfit(i) {
+          $.post("https://renzu_clothes/delclothe",JSON.stringify({name:i}),function(cb) {
+            if (cb) {
+              document.getElementById(i+'_clotheid').remove()
+            }
+          });
         }
 
         function removeitem(item,compo,id) {

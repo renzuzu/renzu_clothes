@@ -75,6 +75,23 @@ ESX.RegisterServerCallback('renzu_clothes:save',function(source, cb, clothe)
     
 end)
 
+ESX.RegisterServerCallback('renzu_clothes:delclothe',function(source, cb, name)
+    local source = tonumber(source)
+    local xPlayer = ESX.GetPlayerFromId(source)
+    local result = SqlFunc(Config.Mysql,'fetchAll','SELECT * FROM renzu_clothes WHERE identifier = @identifier', {['@identifier'] = xPlayer.identifier})
+    if result[1] ~= nil then
+        local data = result[1]
+        local wardrobe = json.decode(data['wardrobe'])
+        wardrobe[name] = nil
+        SqlFunc(Config.Mysql,'execute','UPDATE renzu_clothes SET wardrobe = @wardrobe WHERE identifier = @identifier', {
+            ['@identifier'] = xPlayer.identifier,
+            ['@wardrobe'] = json.encode(wardrobe)
+        })
+        cb(true)
+    end
+    cb(false)
+end)
+
 ESX.RegisterServerCallback('renzu_clothes:buyclothe',function(source, cb, compo, draw, texture, dlc)
     local source = tonumber(source)
     local xPlayer = ESX.GetPlayerFromId(source)
