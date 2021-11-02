@@ -150,7 +150,7 @@ ESX.RegisterServerCallback('renzu_clothes:saveclothes', function(source, cb, nam
         Config.Notify('error','Clothes', 'Credit Card is decline',xPlayer.source)
         cb(true)
     else
-        SaveClothes(name,data,xPlayer)
+        SaveClothes(name,data,xPlayer,clothedata)
         cb(true)
     end
 end)
