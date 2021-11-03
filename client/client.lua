@@ -24,6 +24,7 @@ local clothecache = {}
 local defaultclothes = {}
 local currentblacklist = {}
 local showall = false
+local RDefaultClothes = {}
 MathRound = function(value, numDecimalPlaces)
 	if numDecimalPlaces then
 		local power = 10^numDecimalPlaces
@@ -219,15 +220,15 @@ CreateThread(function()
         elseif havecart and currentshop and closestdist == -1 then
             for k,v in pairs(incart) do
                 if v.incart then
-                    if string.find(v.skin, "arms") and lastSkin['arms'] and defaultclothes[k] then
-                        lastSkin['arms'] = defaultclothes[k].draw
-                    elseif defaultclothes[k] then
-                        
+                    if string.find(v.skin, "arms") and lastSkin['arms'] and defaultclothes[v.compo] then
+                        lastSkin['arms'] = defaultclothes[v.compo].draw
+                    elseif defaultclothes[v.compo] then
                         lastSkin[k..'_1'] = defaultclothes[v.compo].draw
                         lastSkin[k..'_2'] = defaultclothes[v.compo].texture
                     end
                 end
             end
+            CreateIncidentWithEntity(14,PlayerPedId(),5,30)
             TriggerEvent('skinchanger:loadSkin', lastSkin)
             closestdist = -1
             havecart = false
@@ -337,7 +338,7 @@ function OpenClotheMenu(restrict, nocamera, export)
     confirm = false
     if not havecart then
         
-        TriggerEvent('skinchanger:getSkin', function(skin) lastSkin = skin end)
+        TriggerEvent('skinchanger:getSkin', function(skin) RDefaultClothes = skin lastSkin = skin end)
     end
     ESX.TriggerServerCallback("renzu_clothes:getPlayerWardrobe",function(data)
         TriggerEvent('skinchanger:getData', function(components, maxVals)
@@ -551,7 +552,7 @@ RegisterNUICallback('addtocart', function(data, cb)
     for k,v in pairs(unpaid) do
         unpaid[k].incart = true
     end
-    incart = deepcopy(unpaid)
+    incart = unpaid
     havecart = true
     Config.Notify( 'success', 'Clothing',' All Selected Clothes is now added to your cart')
     cb(true)
@@ -756,7 +757,6 @@ RegisterNUICallback('buyitem', function(data, cb)
 end)
 
 RegisterNUICallback('delclothe', function(data, cb)
-    print(data.name)
     ESX.TriggerServerCallback("renzu_clothes:delclothe",function(a)
         confirm = a
         cb(a)
@@ -992,6 +992,7 @@ RegisterNUICallback('close', function(data, cb)
         clothingopen = false
         TriggerEvent('skinchanger:getSkin', function(skin) 
             lastSkin = skin
+            RDefaultClothes = skin
             if oldskin == nil then
                 oldskin = skin
             end
