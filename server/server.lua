@@ -92,9 +92,12 @@ ESX.RegisterServerCallback('renzu_clothes:delclothe',function(source, cb, name)
     cb(false)
 end)
 
-ESX.RegisterServerCallback('renzu_clothes:buyclothe',function(source, cb, compo, draw, texture, dlc)
+ESX.RegisterServerCallback('renzu_clothes:buyclothe',function(source, cb, compo, draw, texture, dlc, bill)
     local source = tonumber(source)
     local xPlayer = ESX.GetPlayerFromId(source)
+    
+    if xPlayer.getMoney() >= bill then
+        xPlayer.removeMoney(bill)
     local result = SqlFunc(Config.Mysql,'fetchAll','SELECT * FROM renzu_clothes WHERE identifier = @identifier', {['@identifier'] = xPlayer.identifier})
     if result[1] == nil then -- save new wardrobe to db
         local data = {}
@@ -130,6 +133,10 @@ ESX.RegisterServerCallback('renzu_clothes:buyclothe',function(source, cb, compo,
         })
     end
     Config.Notify('success','Job', dlc..' has been added to your clothing inventory',xPlayer.source)
+    else
+        Config.Notify('success','Job', dlc..' cannot not afford',xPlayer.source)
+        cb(false)
+    end
 end)
 
 ESX.RegisterServerCallback('renzu_clothes:selectclothe',function(source, cb, skin)
