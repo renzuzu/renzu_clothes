@@ -752,7 +752,7 @@ RegisterNUICallback('buyitem', function(data, cb)
     ESX.TriggerServerCallback("renzu_clothes:buyclothe",function(a)
         confirm = a
         cb(a)
-    end,data.componentid,data.drawableid,data.textureid,GetClotheData(Config.Data[compo].componentid,data.drawableid,data.textureid).NameHash)
+    end,data.componentid,data.drawableid,data.textureid,GetClotheData(Config.Data[compo].componentid,data.drawableid,data.textureid).NameHash,GetClotheData(Config.Data[compo].componentid,data.drawableid,data.textureid).Price)
     cb(true)
 end)
 
