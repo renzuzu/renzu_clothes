@@ -159,7 +159,7 @@ CreateThread(function()
         SetBlipSprite (blip, v.blips.sprite)
         SetBlipDisplay(blip, 4)
         SetBlipScale  (blip, 0.8)
-        SetBlipColour (blip, v.blips.coord)
+        SetBlipColour (blip, v.blips.color)
         SetBlipAsShortRange(blip, true)
         BeginTextCommandSetBlipName('STRING')
         AddTextComponentSubstringPlayerName(""..v.name.."")
@@ -644,7 +644,7 @@ RegisterNUICallback('removeclothe', function(data, cb)
                 TriggerEvent('skinchanger:change', k, v.m_default or 0)
                 --SetPedComponentVariation(ped, v.componentid, v.m_default or 0, 0, 0) 
             else
-                TriggerEvent('skinchanger:change', k, v.m_default or 0)
+                TriggerEvent('skinchanger:change', k, v.f_default or 0)
                 --SetPedComponentVariation(ped, v.componentid, v.f_default or 0, 0, 0) 
             end
         elseif v and v.type == "Props" then
@@ -652,7 +652,7 @@ RegisterNUICallback('removeclothe', function(data, cb)
                 TriggerEvent('skinchanger:change', k, v.m_default or 0)
                 --SetPedPropIndex(ped, v.componentid, v.m_default, 0) 
             else
-                TriggerEvent('skinchanger:change', k, v.m_default or 0)
+                TriggerEvent('skinchanger:change', k, v.f_default or 0)
                 --SetPedPropIndex(ped, v.componentid, v.f_default, 0) 
             end
         end
@@ -780,7 +780,7 @@ RegisterNUICallback('selectclothes', function(data, cb)
                     TriggerEvent('skinchanger:change', k, v.m_default or 0)
                     --SetPedComponentVariation(ped, v.componentid, v.m_default or 0, 0, 0) 
                 else
-                    TriggerEvent('skinchanger:change', k, v.m_default or 0)
+                    TriggerEvent('skinchanger:change', k, v.f_default or 0)
                     --SetPedComponentVariation(ped, v.componentid, v.f_default or 0, 0, 0) 
                 end
             elseif v and v.type == "Props" then
@@ -788,7 +788,7 @@ RegisterNUICallback('selectclothes', function(data, cb)
                     TriggerEvent('skinchanger:change', k, v.m_default or 0)
                     --SetPedPropIndex(ped, v.componentid, v.m_default, 0) 
                 else
-                    TriggerEvent('skinchanger:change', k, v.m_default or 0)
+                    TriggerEvent('skinchanger:change', k, v.f_default or 0)
                     --SetPedPropIndex(ped, v.componentid, v.f_default, 0) 
                 end
             end
