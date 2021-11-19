@@ -1,30 +1,13 @@
 ESX = nil
-local PlayerData = {}
-local playerLoaded = false
-local tid = 0
-local confirm = false
-currentshop = nil
+local clothes, clothesdata, clothestemp, unpaid, incart, maxcolor, variantcache, clothecache, defaultclothes, currentblacklist, RDefaultClothes, markers, indexcache, selecting, pricecache = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
+local playerLoaded, confirm, setjob, inventory, havecart, exporting, showall, drawtext, indist, neargarage, inmall = false, false, false, false, false, false, false, false, false, false, false
+local tid, bill, drawsleep, oldindex = 0, 0, 1, -1
+currentshop, currentmall = nil, nil
 clothingopen = false
-local setjob = false
 local lastSkin, cam, isCameraActive
 local firstSpawn, zoomOffset, camOffset, heading, skinLoaded = true, 0.0, 0.0, 90.0, false
-local clothes = {}
-local clothesdata = {}
-local clothestemp = {}
-local inventory = false
-local bill = 0
-local unpaid = {}
-local oldskin = nil
-local havecart = false
-local incart = {}
-local exporting = false
-local maxcolor = {}
-local variantcache = {}
-local clothecache = {}
-local defaultclothes = {}
-local currentblacklist = {}
-local showall = false
-local RDefaultClothes = {}
+local oldskin, shop_ped = nil, nil
+
 MathRound = function(value, numDecimalPlaces)
 	if numDecimalPlaces then
 		local power = 10^numDecimalPlaces
@@ -32,21 +15,20 @@ MathRound = function(value, numDecimalPlaces)
 	else
 		return math.floor(value + 0.5)
 	end
-end
+end 
 
 Citizen.CreateThread(function()
-    Wait(1000)
-    while ESX == nil do
+	while ESX == nil do
 		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+		Citizen.Wait(0)
+	end
+
+	while ESX.GetPlayerData().job == nil do
 		Citizen.Wait(100)
 	end
 
-	while PlayerData.job == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		PlayerData = ESX.GetPlayerData()
-		Citizen.Wait(111)
-	end
-	PlayerData = ESX.GetPlayerData()
+	PlayerLoaded = true
+	ESX.PlayerData = ESX.GetPlayerData()
 end)
 
 function Default(componentid,drawableid,textureid)
@@ -72,17 +54,15 @@ end
 
 RegisterNetEvent('esx:playerLoaded')
 AddEventHandler('esx:playerLoaded', function(xPlayer)
-    playerloaded = true
+	ESX.PlayerData = xPlayer
+	PlayerLoaded = true
 end)
 
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
-	PlayerData.job = job
-	playerjob = PlayerData.job.name
+	ESX.PlayerData.job = job
+	playerjob = ESX.PlayerData.job.name
 end)
-
-local drawtext = false
-local indist = false
 
 function tostringplate(plate)
     if plate ~= nil then
@@ -96,8 +76,6 @@ function tostringplate(plate)
     end
 end
 
-local neargarage = false
-
 function ShowFloatingHelpNotification(msg, coords, disablemarker, i)
     AddTextEntry('FloatingHelpNotificationsc'..i, msg)
     SetFloatingHelpTextWorldPosition(1, coords+vector3(0,0,0.3))
@@ -106,11 +84,6 @@ function ShowFloatingHelpNotification(msg, coords, disablemarker, i)
     EndTextCommandDisplayHelp(2,1, 0, 1)
 end
 
-local inmall = false
-currentmall = nil
-
-local markers = {}
-local drawsleep = 1
 function DrawZuckerburg(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
     local i = i
     if not markers[i] and i ~= nil then
@@ -149,7 +122,6 @@ function DrawZuckerburg(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
     end
 end
 
-local shop_ped = nil
 CreateThread(function()
     Wait(1000)
     for k,v in pairs(Config.Shop) do
@@ -300,7 +272,6 @@ AddEventHandler('renzu_clothes:cashier', function()
     end,false,GetPlayerClothes())
 end)
 
-local indexcache = {}
 RegisterNetEvent('renzu_clothes:openwardrobe')
 AddEventHandler('renzu_clothes:openwardrobe', function(i,indexes)
     local default = nill
@@ -322,7 +293,6 @@ function OpenClotheMenu(restrict, nocamera, export)
         end
         indexcache = restrict
     end
-    print(restrict)
     if not nocamera then
         CreateSkinCam()
     else
@@ -433,8 +403,6 @@ function OpenClotheMenu(restrict, nocamera, export)
     end,false,GetPlayerClothes())
 end
 
-local oldindex = -1
-local pricecache = {}
 function SelectClothes(data)
     if data.name == nil then return end
     local name = data.name:gsub("_id", "")
@@ -554,7 +522,7 @@ RegisterNUICallback('addtocart', function(data, cb)
     end
     incart = unpaid
     havecart = true
-    Config.Notify( 'success', 'Clothing',' All Selected Clothes is now added to your cart')
+    Config.Notify( 'success', 'Clothing',' All Selected Clothes have been added to your cart')
     cb(true)
 end)
 
@@ -607,7 +575,7 @@ RegisterNUICallback('removeitem', function(data, cb)
             
         end
     end
-    Config.Notify( 'success', 'Clothing',' Selected Clothes is now removed from cart')
+    Config.Notify( 'success', 'Clothing',' Selected Clothes have been removed from cart')
     cb(true)
 end)
 
@@ -620,7 +588,6 @@ function GetPLayerModel()
     return model
 end
 
-local selecting = {}
 RegisterNUICallback('changeclothes', function(data, cb)
     
     Wait(math.random(1,10))
@@ -1134,7 +1101,6 @@ function OpenClotheInventory(nocamera)
         end)
     end,true, GetPlayerClothes())
 end
-
 
 exports('OpenClotheInventory', function(nocam)
     return OpenClotheInventory(nocam)
