@@ -1,5 +1,6 @@
-fx_version 'adamant'
 -- MADE BY Renzuzu
+
+fx_version 'bodacious'
 game 'gta5'
 
 lua54 'on'
@@ -10,15 +11,15 @@ ui_page {
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',	
-	'config.lua',
 	'server/server.lua',
 }
 
 client_scripts {
-	'config.lua',
 	'components.lua',
 	'client/client.lua',
 }
+
+shared_script 'config.lua'
 
 files {
 	'html/index.html',
