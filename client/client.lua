@@ -228,7 +228,6 @@ CreateThread(function()
                     end
                 end
             end
-            CreateIncidentWithEntity(14,PlayerPedId(),5,30)
             TriggerEvent('skinchanger:loadSkin', lastSkin)
             closestdist = -1
             havecart = false
