@@ -273,7 +273,7 @@ end)
 
 RegisterNetEvent('renzu_clothes:openwardrobe')
 AddEventHandler('renzu_clothes:openwardrobe', function(i,indexes)
-    local default = nill
+    local default = nil
     if indexes ~= nil and indexes ~= false then
         default = indexes
         --
