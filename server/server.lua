@@ -150,32 +150,49 @@ end)
 
 ESX.RegisterServerCallback('renzu_clothes:saveclothes', function(source, cb, name, data, inwardrobe, bill, clothedata, payment, currentshop)
     local xPlayer    = ESX.GetPlayerFromId(source)
-    
-    if inwardrobe and payment == 'cash' and xPlayer.getMoney() >= bill then
-        xPlayer.removeMoney(bill)
-        if Config.renzujobs then
-            exports.renzu_jobs:addMoney(tonumber(bill),Config.Shop[currentshop].job,source,'money',true)
+    if payment then -- Payment exists when opening cashier.
+        if bill == 0 then
+            Config.Notify('error', 'Clothing', 'You do not have a bill to settle with the cashier.', source)
+            cb("ignore")
+        elseif name == '' then
+            Config.Notify('error', 'Clothing', 'You will need to give a name for your outfit.', source)
+            cb("nosave")
+	elseif payment == 'cash' then
+            if xPlayer.getMoney() >= bill then
+            	xPlayer.removeMoney(bill)
+                if Config.renzujobs then
+                    exports.renzu_jobs:addMoney(tonumber(bill),Config.Shop[currentshop].job,source,'money',true)
+                end
+                Config.Notify('success', 'Clothing', 'Purchased clothes successfully.', source)
+        	SaveClothes(name,data,xPlayer,clothedata)
+                cb("save")
+            else
+                Config.Notify('error', 'Clothing', 'Not enough money on hand to make purchase.', source)
+                cb("nosave")
+            end
+    	elseif payment == 'bank' then
+            if xPlayer.getAccount('bank').money >= bill then
+        		xPlayer.removeAccountMoney('bank', bill)
+                if Config.renzujobs then
+                    exports.renzu_jobs:addMoney(tonumber(bill),Config.Shop[currentshop].job,source,'money',true)
+                end
+                Config.Notify('success', 'Clothing', 'Purchased clothes successfully.', source)
+        	SaveClothes(name,data,xPlayer,clothedata)
+                cb("save")
+            else
+                Config.Notify('error', 'Clothing', 'Not enough money in bank to make purchase.', source)
+                cb("nosave")
+            end
         end
-        SaveClothes(name,data,xPlayer,clothedata)
-        Config.Notify('success','Clothes', 'Successfully Bought the clothes',xPlayer.source)
-        cb(true)
-    elseif inwardrobe and payment == 'cash' and xPlayer.getMoney() <= bill then
-        Config.Notify('error','Clothes', 'Not enough money cabron',xPlayer.source)
-        cb(true)
-    elseif inwardrobe and payment == 'bank' and xPlayer.getAccount('bank').money >= bill then
-        xPlayer.removeAccountMoney('bank',bill)
-        if Config.renzujobs then
-            exports.renzu_jobs:addMoney(tonumber(bill),Config.Shop[currentshop].job,source,'money',true)
-        end
-        SaveClothes(name,data,xPlayer,clothedata)
-        Config.Notify('success','Clothes', 'Successfully Bought the clothes',xPlayer.source)
-        cb(true)
-    elseif inwardrobe and payment == 'bank' and xPlayer.getAccount('bank').money <= bill then
-        Config.Notify('error','Clothes', 'Credit Card is decline',xPlayer.source)
-        cb(true)
-    else
-        SaveClothes(name,data,xPlayer,clothedata)
-        cb(true)
+    else -- Payment is nil when opening the wardrobe.
+	if name == '' then
+            Config.Notify('error', 'Clothing', 'You will need to give a name for your outfit.', source)
+            cb("nosave")
+	else
+            Config.Notify('success','Clothing', 'Outfit successfully saved.', source)
+            SaveClothes(name,data,xPlayer,clothedata)
+            cb("save")
+	end
     end
 end)
 

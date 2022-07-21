@@ -273,7 +273,7 @@ end)
 
 RegisterNetEvent('renzu_clothes:openwardrobe')
 AddEventHandler('renzu_clothes:openwardrobe', function(i,indexes)
-    local default = nill
+    local default = nil
     if indexes ~= nil and indexes ~= false then
         default = indexes
         --
@@ -637,13 +637,13 @@ RegisterNUICallback('removeclothe', function(data, cb)
 end)
 
 RegisterNUICallback('get_total', function(data, cb)
-    local bills = 0
+    bill = 0
     for k,v in pairs(unpaid) do
         if v.incart then
-            bills = bills + v.price
+            bill = bill + v.price
         end
     end
-    cb(bills)
+    cb(bill)
 end)
 
 RegisterNUICallback('mouseup', function(data, cb)
@@ -691,13 +691,21 @@ RegisterNUICallback('saveclothes', function(data, cb)
     TriggerEvent('skinchanger:getSkin', function(getSkin) currentskin = getSkin end)
     Wait(500)
     ESX.TriggerServerCallback("renzu_clothes:saveclothes",function(a)
-        confirm = a
-        if a then
+        if a == "nosave" then
+            a = false
+	else
+            if a == "save" then
+                a = true
+	    elseif a == "ignore" then
+		a = false
+	    end
             unpaid = {}
             incart = {}
             bill = 0
             havecart = false
         end
+                    
+        confirm = a
         cb(a)
     end,clothename,currentskin,nowardrobe or showall,bill,GetPlayerClothes(),data.payment,currentshop)
     
