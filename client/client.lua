@@ -1,4 +1,4 @@
-ESX = nil
+ESX = exports['es_extended']:getSharedObject()
 local clothes, clothesdata, clothestemp, unpaid, incart, maxcolor, variantcache, clothecache, defaultclothes, currentblacklist, RDefaultClothes, markers, indexcache, selecting, pricecache = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 local playerLoaded, confirm, setjob, inventory, havecart, exporting, showall, drawtext, indist, neargarage, inmall = false, false, false, false, false, false, false, false, false, false, false
 local tid, bill, drawsleep, oldindex = 0, 0, 1, -1
@@ -7,29 +7,6 @@ clothingopen = false
 local lastSkin, cam, isCameraActive
 local firstSpawn, zoomOffset, camOffset, heading, skinLoaded = true, 0.0, 0.0, 90.0, false
 local oldskin, shop_ped = nil, nil
-
-MathRound = function(value, numDecimalPlaces)
-	if numDecimalPlaces then
-		local power = 10^numDecimalPlaces
-		return math.floor((value * power) + 0.5) / (power)
-	else
-		return math.floor(value + 0.5)
-	end
-end 
-
-Citizen.CreateThread(function()
-	while ESX == nil do
-		TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-		Citizen.Wait(0)
-	end
-
-	while ESX.GetPlayerData().job == nil do
-		Citizen.Wait(100)
-	end
-
-	PlayerLoaded = true
-	ESX.PlayerData = ESX.GetPlayerData()
-end)
 
 function Default(componentid,drawableid,textureid)
     return {NameHash=""..componentid.."_"..drawableid.."_"..textureid, label="Clothe "..componentid.."_"..drawableid.."_"..textureid,Price=5000}
@@ -52,30 +29,6 @@ function GetClotheData(componentid,drawableid,textureid,prop,name)
     return ret
 end
 
-RegisterNetEvent('esx:playerLoaded')
-AddEventHandler('esx:playerLoaded', function(xPlayer)
-	ESX.PlayerData = xPlayer
-	PlayerLoaded = true
-end)
-
-RegisterNetEvent('esx:setJob')
-AddEventHandler('esx:setJob', function(job)
-	ESX.PlayerData.job = job
-	playerjob = ESX.PlayerData.job.name
-end)
-
-function tostringplate(plate)
-    if plate ~= nil then
-        if not Config.PlateSpace then
-            return string.gsub(tostring(plate), '^%s*(.-)%s*$', '%1')
-        else
-            return tostring(plate)
-        end
-    else
-        return 123454
-    end
-end
-
 function ShowFloatingHelpNotification(msg, coords, disablemarker, i)
     AddTextEntry('FloatingHelpNotificationsc'..i, msg)
     SetFloatingHelpTextWorldPosition(1, coords+vector3(0,0,0.3))
@@ -84,7 +37,7 @@ function ShowFloatingHelpNotification(msg, coords, disablemarker, i)
     EndTextCommandDisplayHelp(2,1, 0, 1)
 end
 
-function DrawZuckerburg(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
+function DrawShopMarker(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
     local i = i
     if not markers[i] and i ~= nil then
         --
@@ -166,12 +119,12 @@ CreateThread(function()
             end
             vec = v.coord
             if v.wardrobe and #(GetEntityCoords(PlayerPedId()) - v.wardrobe) < 7 and not v.showall then
-                DrawZuckerburg('wardrobe',v.wardrobe,{3,8}, 'Press [E] Wardrobe','OpenClotheInventory',false, false,false,true)
+                DrawShopMarker('wardrobe',v.wardrobe,{3,8}, 'Press [E] Wardrobe','OpenClotheInventory',false, false,false,true)
             end
             if closestdist < 3 and v.showall then
                 nowardrobe = false
                 showall = v.showall or false
-                DrawZuckerburg(currentshop,v.coord,{2,8}, 'Press [E] Clothing Shop','renzu_clothes:openwardrobe',false, v.showallindexes or false)
+                DrawShopMarker(currentshop,v.coord,{2,8}, 'Press [E] Clothing Shop','renzu_clothes:openwardrobe',false, v.showallindexes or false)
             end
             if displays[1] and closestdist < 15 and not v.showall then
                 for k2,v2 in ipairs(displays) do
@@ -181,12 +134,12 @@ CreateThread(function()
                         if dist < 2 then
                             currentblacklist = v2.blacklist
                         end
-                        DrawZuckerburg(k2,v2.coord,{1.5,8}, 'Press [E] '..v2.label,'renzu_clothes:openwardrobe',false,v2.indexes,false)
+                        DrawShopMarker(k2,v2.coord,{1.5,8}, 'Press [E] '..v2.label,'renzu_clothes:openwardrobe',false,v2.indexes,false)
                     end
                 end
                 --
                 if v.cashier and #(GetEntityCoords(PlayerPedId()) - v.cashier) < 8 then
-                    DrawZuckerburg(69,v.cashier,{1,8}, 'Press [E] Cashier','renzu_clothes:cashier',false,false,false)
+                    DrawShopMarker(69,v.cashier,{1,8}, 'Press [E] Cashier','renzu_clothes:cashier',false,false,false)
                 end
             end
         elseif havecart and currentshop and closestdist == -1 then
@@ -258,8 +211,7 @@ function CreateEntity(hash, coords, headings)
     return ped
 end
 
-RegisterNetEvent('renzu_clothes:cashier')
-AddEventHandler('renzu_clothes:cashier', function()
+RegisterNetEvent('renzu_clothes:cashier', function()
     ESX.TriggerServerCallback("renzu_clothes:getPlayerWardrobe",function(data)
         SendNUIMessage({
             type = 'Cashier',
@@ -271,8 +223,7 @@ AddEventHandler('renzu_clothes:cashier', function()
     end,false,GetPlayerClothes())
 end)
 
-RegisterNetEvent('renzu_clothes:openwardrobe')
-AddEventHandler('renzu_clothes:openwardrobe', function(i,indexes)
+RegisterNetEvent('renzu_clothes:openwardrobe', function(i,indexes)
     local default = nil
     if indexes ~= nil and indexes ~= false then
         default = indexes
@@ -306,7 +257,6 @@ function OpenClotheMenu(restrict, nocamera, export)
     local playerPed = PlayerPedId()
     confirm = false
     if not havecart then
-        
         TriggerEvent('skinchanger:getSkin', function(skin) RDefaultClothes = skin lastSkin = skin end)
     end
     ESX.TriggerServerCallback("renzu_clothes:getPlayerWardrobe",function(data)
@@ -540,15 +490,6 @@ RegisterNUICallback('removeitem', function(data, cb)
             
         end
     end
-    --
-    -- for k,v in pairs(incart) do
-    --     --
-    --     if v.incart and v.skin == data.name then
-    --         
-    --         if unpaid[k] then unpaid[k] = nil v = nil end
-    --         if incart[k] then incart[k] = nil v = nil end
-    --     end
-    -- end
     
     unpaid[data.name].incart = false
     incart[data.name].incart = false
@@ -608,18 +549,14 @@ RegisterNUICallback('removeclothe', function(data, cb)
         if v and v.type == "ComponentVariations" then
             if model == 'male' then
                 TriggerEvent('skinchanger:change', k, v.m_default or 0)
-                --SetPedComponentVariation(ped, v.componentid, v.m_default or 0, 0, 0) 
             else
                 TriggerEvent('skinchanger:change', k, v.f_default or 0)
-                --SetPedComponentVariation(ped, v.componentid, v.f_default or 0, 0, 0) 
             end
         elseif v and v.type == "Props" then
             if model == 'male' then
                 TriggerEvent('skinchanger:change', k, v.m_default or 0)
-                --SetPedPropIndex(ped, v.componentid, v.m_default, 0) 
             else
                 TriggerEvent('skinchanger:change', k, v.f_default or 0)
-                --SetPedPropIndex(ped, v.componentid, v.f_default, 0) 
             end
         end
     end
@@ -690,23 +627,22 @@ RegisterNUICallback('saveclothes', function(data, cb)
     local currentskin = {}
     TriggerEvent('skinchanger:getSkin', function(getSkin) currentskin = getSkin end)
     Wait(500)
-    ESX.TriggerServerCallback("renzu_clothes:saveclothes",function(a)
-        if a == "nosave" then
-            a = false
-	else
-            if a == "save" then
-                a = true
-	    elseif a == "ignore" then
-		a = false
-	    end
+    ESX.TriggerServerCallback("renzu_clothes:saveclothes",function(value)
+        if value == "nosave" then
+            value = false
+        else
+            if value == "save" then
+                value = true
+            elseif value == "ignore" then
+                value = false
+            end
             unpaid = {}
             incart = {}
             bill = 0
             havecart = false
         end
-                    
-        confirm = a
-        cb(a)
+        confirm = value
+        cb(value)
     end,clothename,currentskin,nowardrobe or showall,bill,GetPlayerClothes(),data.payment,currentshop)
     
     SetNuiFocus(false,false)
@@ -723,17 +659,17 @@ RegisterNUICallback('buyitem', function(data, cb)
         compo = compo:gsub("_1", "")
     end
     
-    ESX.TriggerServerCallback("renzu_clothes:buyclothe",function(a)
-        confirm = a
-        cb(a)
+    ESX.TriggerServerCallback("renzu_clothes:buyclothe",function(value)
+        confirm = value
+        cb(value)
     end,data.componentid,data.drawableid,data.textureid,GetClotheData(Config.Data[compo].componentid,data.drawableid,data.textureid).NameHash,GetClotheData(Config.Data[compo].componentid,data.drawableid,data.textureid).Price)
     cb(true)
 end)
 
 RegisterNUICallback('delclothe', function(data, cb)
-    ESX.TriggerServerCallback("renzu_clothes:delclothe",function(a)
-        confirm = a
-        cb(a)
+    ESX.TriggerServerCallback("renzu_clothes:delclothe",function(value)
+        confirm = value
+        cb(value)
     end,data.name)
 end)
 
@@ -760,18 +696,14 @@ RegisterNUICallback('selectclothes', function(data, cb)
             if v and v.type == "ComponentVariations" then
                 if model == 'male' then
                     TriggerEvent('skinchanger:change', k, v.m_default or 0)
-                    --SetPedComponentVariation(ped, v.componentid, v.m_default or 0, 0, 0) 
                 else
                     TriggerEvent('skinchanger:change', k, v.f_default or 0)
-                    --SetPedComponentVariation(ped, v.componentid, v.f_default or 0, 0, 0) 
                 end
             elseif v and v.type == "Props" then
                 if model == 'male' then
                     TriggerEvent('skinchanger:change', k, v.m_default or 0)
-                    --SetPedPropIndex(ped, v.componentid, v.m_default, 0) 
                 else
                     TriggerEvent('skinchanger:change', k, v.f_default or 0)
-                    --SetPedPropIndex(ped, v.componentid, v.f_default, 0) 
                 end
             end
         end
@@ -991,9 +923,9 @@ RegisterNUICallback('close', function(data, cb)
     cb(true)
 end)
 
-RegisterCommand('wardrobe', function(source, args, rawCommand)
-    OpenClotheInventory()
-end)
+-- RegisterCommand('wardrobe', function(source, args, rawCommand)
+--     OpenClotheInventory()
+-- end)
 
 function OpenClotheInventory(nocamera)
     if havecart then Config.Notify( 'error', 'Clothing',' You need to remove items from cart to use wardrobe') return end

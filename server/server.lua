@@ -1,23 +1,6 @@
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
-
-function deepcopy(orig)
-    local orig_type = type(orig)
-    local copy
-    if orig_type == 'table' then
-        copy = {}
-        for orig_key, orig_value in next, orig, nil do
-            copy[deepcopy(orig_key)] = deepcopy(orig_value)
-        end
-        setmetatable(copy, deepcopy(getmetatable(orig)))
-    else -- number, string, boolean, etc
-        copy = orig
-    end
-    return copy
-end
+ESX = exports['es_extended']:getSharedObject()
 
 function AddClothestoInventory(current,data)
-    
     for k,v in pairs(data) do
         
         --if current['inventory'] == nil then current['inventory'] = {} 
@@ -27,7 +10,6 @@ function AddClothestoInventory(current,data)
             
         end
     end
-    
     return current
 end
 
