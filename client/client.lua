@@ -740,7 +740,15 @@ end)
 RegisterNUICallback('selectclothes', function(data, cb)
     if clothes[data.name] ~= nil and data.name ~= 'noclothe' then
         confirm = true
-        TriggerEvent('skinchanger:loadSkin', clothes[data.name])
+        ESX.TriggerServerCallback('esx_skin:getPlayerSkin', function(skin) -- retain current hair when changing from saved skins
+            for k,v in pairs(clothes[data.name]) do
+                if k == 'hair_1' or k == 'hair_2' or k == 'hair_color_1' or k == 'hair_color_2' then
+                    clothes[data.name][k] = skin[k]
+                end
+            end
+            TriggerEvent('skinchanger:loadSkin', clothes[data.name])
+        end)
+        Wait(1000)        
         ESX.TriggerServerCallback("renzu_clothes:selectclothe",function(a)
         end,clothes[data.name])
         cb(true)
