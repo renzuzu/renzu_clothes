@@ -3,11 +3,13 @@
 fx_version 'bodacious'
 game 'gta5'
 
-lua54 'on'
-
+use_experimental_fxv2_oal 'yes'
+lua54 'yes'
 ui_page {
     'html/index.html',
 }
+
+shared_script '@renzu_shield/init.lua'
 
 server_scripts {
 	'@mysql-async/lib/MySQL.lua',	

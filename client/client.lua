@@ -30,17 +30,28 @@ function GetClotheData(componentid,drawableid,textureid,prop,name)
 end
 
 function ShowFloatingHelpNotification(msg, coords, disablemarker, i)
-    AddTextEntry('FloatingHelpNotificationsc'..i, msg)
-    SetFloatingHelpTextWorldPosition(1, coords+vector3(0,0,0.3))
-    SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
-    BeginTextCommandDisplayHelp('FloatingHelpNotificationsc'..i)
-    EndTextCommandDisplayHelp(2,1, 0, 1)
+    CreateThread(function()
+        for i = 0, 5 do
+            local i = GetGameTimer()
+            --ClearFloatingHelp(1,true)
+            AddTextEntry('FloatingHelpNotificationsc'..i, msg)
+            --SetFloatingHelpTextToEntity(1, PlayerPedId(),0.0,0.0,0.5)
+            --SetFloatingHelpTextScreenPosition(1,0.0,5.0)
+            SetFloatingHelpTextWorldPosition(1, coords.x,coords.y,coords.z+0.3)
+            SetFloatingHelpTextStyle(1, 1, 2, -1, 3, 0)
+            BeginTextCommandDisplayHelp('FloatingHelpNotificationsc'..i)
+            EndTextCommandDisplayHelp(2,1, 0, 1)
+            if i == 5 then return end
+        end
+    end)
 end
 
+local neardraw = {}
 function DrawShopMarker(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
     local i = i
     if not markers[i] and i ~= nil then
         --
+        neardraw[i] = false
         Citizen.CreateThread(function()
             markers[i] = true
             --local reqdist = reqdist[2]
@@ -48,16 +59,17 @@ function DrawShopMarker(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
             local dist = #(GetEntityCoords(PlayerPedId()) - coord)
             --
             while dist < reqdist[2] do
-                drawsleep = 1
+                drawsleep = 5
+                local near = dist < reqdist[1]
                 if clothingopen then drawsleep = 2000 end
                 dist = #(GetEntityCoords(PlayerPedId()) - coord)
                 if not disablemarker and not clothingopen then
-                    DrawMarker(27, coord.x,coord.y,coord.z-0.8, 0, 0, 0, 0, 0, 0, 0.7, 0.7, 0.7, 200, 255, 255, 255, 0, 0, 1, 1, 0, 0, 0)
+                    DrawMarker(27, coord.x,coord.y,coord.z-0.8, 0, 0, 0, 0, 0, 0, 0.7, 0.7, 0.7, 5, 65, 145, 255, 0, 0, 0, 0, 0, 0, 0)
                 end
-                --
-                if dist < reqdist[1] then ShowFloatingHelpNotification(msg, coord, disablemarker , i) end
-                if dist < reqdist[1] and IsControlJustReleased(1, 51) then
-                    ShowFloatingHelpNotification(msg, coord, disablemarker , i)
+                if near and not neardraw[i] then ShowFloatingHelpNotification(msg, coord, disablemarker , i) neardraw[i] = true end
+                if dist > reqdist[1] and neardraw[i] then ClearAllHelpMessages() neardraw[i] = false end
+                if near and IsControlJustReleased(1, 51) then
+                    ClearAllHelpMessages()
                     if not server and not wardrobe then
                         TriggerEvent(event,i,var)
                     elseif server and not wardrobe then
@@ -69,6 +81,7 @@ function DrawShopMarker(i,v,reqdist,msg,event,server,var,disablemarker,wardrobe)
                 end
                 Wait(drawsleep)
             end
+            neardraw[i] = nil
             --ClearAllHelpMessages()
             markers[i] = false
         end)
@@ -129,12 +142,12 @@ CreateThread(function()
             if displays[1] and closestdist < 15 and not v.showall then
                 for k2,v2 in ipairs(displays) do
                     local dist = #(GetEntityCoords(PlayerPedId()) - v2.coord)
-                    if dist < 8 then
+                    if dist < 6 then
                         nowardrobe = true
                         if dist < 2 then
                             currentblacklist = v2.blacklist
                         end
-                        DrawShopMarker(k2,v2.coord,{1.5,8}, 'Press [E] '..v2.label,'renzu_clothes:openwardrobe',false,v2.indexes,false)
+                        DrawShopMarker(k2,v2.coord,{1.5,5}, 'Press [E] '..v2.label,'renzu_clothes:openwardrobe',false,v2.indexes,false)
                     end
                 end
                 --
