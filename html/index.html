@@ -10,87 +10,28 @@
   </head>
   <body>
 
-    <article class="leaderboard" id="clothemenu" style="display: none; position: absolute;">
-      <header style="
-    position: absolute;
-    /* top: -20px; */
-    height: 50px !important;
-    font-size: 15px;
-    background: #28292b;
-    padding-top: 8px;
-    font-variant: all-small-caps;
-">
-<span style="
-        top: 17px;
-        position: absolute;
-    font-size: 18px;
-    font-variant: small-caps;
-    left: 20px;
-">
+    <article class="leaderboard" id="clothemenu">
+      <header id="header1">
+<span id ="spanwardrobe">
 <i class="fad fa-store" style="padding-right:10px;"></i> <span id="shopname"> Wardrobe - Clothing Inventory</span> </span>
     </span>
-    <span style="
-    /* float: right; */
-    padding-left: 30%;
-    font-size: 18px;
-    font-variant-caps: all-small-caps;
-">
-<button style="
-        position: absolute;
-        top: 20%;
-        left: 19vw;
-        height: 30px;
-        width: 100px;
-        font-size: 12px;
-        " id="viewcart" onclick="OpenModalFunction(this)"><i class="fas fa-shopping-cart"></i> View Cart</button>
-  <button style="
-  position: absolute;
-  top: 20%;
-  left: 19vw;
-  height: 30px;
-  width: 100px;
-  font-size: 12px;
-  " id="save_clothe" onclick="OpenModalFunction(this)"><i class="fas fa-shopping-cart"></i> Save Current</button>
+    <span id="spanwardrobe2">
+<button id="viewcart" onclick="OpenModalFunction(this)"><i class="fas fa-shopping-cart"></i> View Cart</button>
+  <button id="save_clothe" onclick="OpenModalFunction(this)"><i class="fas fa-shopping-cart"></i> Save Current</button>
 </span>
 </span>
       </header>
-      <header style="top: 5vh;
-      border-top-right-radius: 0;
-      border-top-left-radius: 0;">
-        <img onclick="refresh()" style="enable-background:new 0 0 511.999 511.999;" class="leaderboard__icon" id="logo" src="https://forum.cfx.re/uploads/default/original/4X/b/1/9/b196908c7e5dfcd60aa9dca0020119fa55e184cb.png">
-        <h1 class="leaderboard__title" style="position: absolute;z-index: 2;top: 15%;left: calc(var(--start) * .91);transform: translateY(-50%);text-transform: uppercase;margin: 0;">
-          <span class="leaderboard__title--top" style="    padding: 0 0 5px;
-          position: absolute;
-          top: 20px;
-          font-size: 19px;">
+      <header id="header2">
+        <img onclick="refresh()" class="leaderboard__icon" id="logo" src="https://forum.cfx.re/uploads/default/original/4X/b/1/9/b196908c7e5dfcd60aa9dca0020119fa55e184cb.png">
+        <h1 class="leaderboard__title" id="h1leaderboard">
+          <span class="leaderboard__title--top" id="spanleaderbord">
             
         </h1>
-        <button style="
-        position: absolute;
-        top: 30%;
-        left: 15vw;
-        height: 50px;
-        width: 150px;
-        font-size: 15px;
-        " id="addtocar" onclick="addtocart(this)"><i class="fas fa-cart-plus"></i> Update Cart</button>
-        <button style="position: absolute;
-        top: 50%;
-        left: 33%;
-        width: 115px;" id="load_clothe" onclick="OpenModalFunction(this)"> <i class="fas fa-list"></i> See Outfits</button>
-        <button style="    top: 50% !important;
-        left: 65%;
-        width: 115px;
-        position: absolute;
-        top: 20%;
-        left: unset;
-        width: 120px;
-        right: 10%;
-        height: unset;
-        display: block;;" id="remove_clothe" onclick="removeclothe(this)"> <i class="fas fa-user-slash"></i> Remove Clothes</button>
+        <button id="addtocar" onclick="addtocart(this)"><i class="fas fa-cart-plus"></i> Update Cart</button>
+        <button id="load_clothe" onclick="OpenModalFunction(this)"> <i class="fas fa-list"></i> See Outfits</button>
+        <button id="remove_clothe" onclick="removeclothe(this)"> <i class="fas fa-user-slash"></i> Remove Clothes</button>
       </header>
-      <main class="leaderboard__profiles" id="clothemain" style="    margin-top: 16vh;
-      height: 49vh;
-      overflow-x: hidden;">
+      <main class="leaderboard__profiles" id="clothemain">
       </main>
     </article>
 

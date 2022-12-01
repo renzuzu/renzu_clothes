@@ -276,7 +276,7 @@ function CreateClothes(clothes,inventory) {
 
 function CreateInvCat(compo) {
   $('#clothemain').html('');
-  document.getElementById("clothemain").style.overflowY = 'hidden';
+  document.getElementById("clothemain").style.overflowY = 'scroll';
   document.getElementById("clothemain").scrollTop = 0;
   for (const i in invcache[compo]) {
       if (i) {
@@ -439,7 +439,7 @@ function OpenModalFunction(e,id,label,type) {
       if (incart) {
         var cart = `
         <div id="`+e.id+`" class="modal" style="display: block;">
-          <div class="modal-content" style="width:40%;">
+          <div class="modal-content" style="    width: 500px;">
             <div class="modal-header">
               <span class="close" onclick="this.parentNode.parentNode.parentNode.remove()">×</span>
               <h2 style="text-align:center;">InCart <span id="playername"></span></h2>
@@ -501,7 +501,7 @@ function OpenModalFunction(e,id,label,type) {
   }
   if (e.id == 'buy') {
     var give = `<div id="`+e.id+`" class="modal" style="display: block;">
-    <div class="modal-content" style="width:40%;">
+    <div class="modal-content" style="width: 500px;">
       <div class="modal-header">
         <span class="close" onclick="CloseModal()">×</span>
         <h2 style="text-align:center;">Buy Item `+label+`<span id="playername"></span></h2>

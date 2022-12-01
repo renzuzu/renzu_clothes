@@ -96,6 +96,7 @@ article {
   position: relative;
   margin: 4px;
   height: 65px;
+  direction: ltr;
 }
 .leaderboard__profile:hover {
   transform: scale(1.05);
@@ -1082,4 +1083,118 @@ input:not(:active) + #h4-container h4 {
             background: #0067bf !important;
             color: white;
             box-shadow: inset 0 0 10px #555;
+          }
+
+          #header1 {
+            position: absolute;
+            /* top: -20px; */
+            height: 50px !important;
+            font-size: 15px;
+            background: #28292b;
+            padding-top: 8px;
+            font-variant: all-small-caps;
+          }
+
+          #spanwardrobe {
+            top: 17px;
+            position: absolute;
+            font-size: 18px;
+            font-variant: small-caps;
+            left: 20px;
+          }
+
+          #spanwardrobe2 {
+            padding-left: 30%;
+            font-size: 18px;
+            font-variant-caps: all-small-caps;
+          }
+
+          #viewcart {
+            position: absolute;
+            top: 20%;
+            height: 30px;
+            width: 100px;
+            font-size: 12px;
+            z-index: 2222;
+            left: 20vw;
+          }
+
+          #saveclothe {
+            position: absolute;
+            top: 20%;
+            left: 19vw;
+            height: 30px;
+            width: 100px;
+            font-size: 12px;
+          }
+
+          #header2 {
+            top: 5vh;
+            border-top-right-radius: 0;
+            border-top-left-radius: 0;
+          }
+
+          #spanleaderbord {
+            padding: 0 0 5px;
+            position: absolute;
+            top: 20px;
+            font-size: 19px;
+          }
+
+          #addtocar {
+            position: absolute;
+            top: 30%;
+            left: 15vw;
+            height: 50px;
+            width: 150px;
+            font-size: 15px;
+          }
+
+          #loadclothe {
+            position: absolute;
+            top: 50%;
+            left: 33%;
+            width: 115px;
+          }
+
+          #remove_clothe {
+            top: 50% !important;
+            left: 65%;
+            width: 115px;
+            position: absolute;
+            top: 20%;
+            left: unset;
+            width: 120px;
+            right: 10%;
+            height: unset;
+            display: block;
+          }
+
+          #clothemain {
+            margin-top: 16vh;
+            height: 49vh;
+            overflow-x: hidden;
+            direction: rtl;
+          }
+
+          #logo {
+            enable-background:new 0 0 511.999 511.999;
+          }
+
+          #h1leaderboard {
+            position: absolute;
+            z-index: 2;
+            top: 15%;
+            left: calc(var(--start) * .91);
+            transform: translateY(-50%);
+            text-transform: uppercase;
+            margin: 0;
+          }
+
+          #clothemenu {
+            display: none; position: absolute;
+          }
+
+          #clothegrid {
+            direction: ltr;
           }
