@@ -1,3 +1,4 @@
+if not Config.old then return end
 ESX = exports['es_extended']:getSharedObject()
 local clothes, clothesdata, clothestemp, unpaid, incart, maxcolor, variantcache, clothecache, defaultclothes, currentblacklist, RDefaultClothes, markers, indexcache, selecting, pricecache = {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}
 local playerLoaded, confirm, setjob, inventory, havecart, exporting, showall, drawtext, indist, neargarage, inmall = false, false, false, false, false, false, false, false, false, false, false

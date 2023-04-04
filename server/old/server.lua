@@ -1,3 +1,4 @@
+if not Config.old then return end
 ESX = exports['es_extended']:getSharedObject()
 
 function AddClothestoInventory(current,data)

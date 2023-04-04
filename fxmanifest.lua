@@ -10,15 +10,18 @@ ui_page {
 }
 
 shared_script '@renzu_shield/init.lua'
+shared_script '@ox_lib/init.lua'
 
 server_scripts {
+	'bridge/framework/server/*.lua',
 	'@mysql-async/lib/MySQL.lua',	
-	'server/server.lua',
+	'server/**.lua',
 }
 
 client_scripts {
+	'bridge/framework/client/*.lua',
 	'components.lua',
-	'client/client.lua',
+	'client/**.lua',
 }
 
 shared_script 'config.lua'
